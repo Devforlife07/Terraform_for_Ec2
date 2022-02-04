@@ -1,3 +1,5 @@
 *.tfvars
 *.tfstate.*
 *.tfstate
+*.hcl
+.terraform/
