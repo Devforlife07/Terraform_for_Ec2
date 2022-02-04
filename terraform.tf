@@ -1,14 +1,14 @@
 #main terraform file to launch aws instance
 provider "aws" {
-  region = "ap-south-1"
+  region = var.aws_region
 }
 # ec2 resource
-resource "aws_instance" "web" {
-  instance_type = "t2.micro"
+resource "aws_instance" "<name>" {
+  instance_type = var.aws_ec2_instance_type
   ami = var.ami_id
   subnet_id = var.subnet_id
   associate_public_ip_address = true
-  key_name = "Devansh"
+  key_name = var.key_name
   iam_instance_profile = aws_iam_instance_profile.ec2.name
   tags ={
     Name = "Hello EC2"
@@ -17,12 +17,9 @@ resource "aws_instance" "web" {
     "${aws_security_group.ec2.id}"
   ]
   root_block_device {
-    volume_type = "gp2"
-    volume_size = 10
+    volume_type = var.volume_type
+    volume_size = var.volume_size
   }
-  depends_on = [
-   local_file.key
-  ]
 }
 
 #generate key pair for ec2 instance
@@ -80,13 +77,13 @@ resource "aws_security_group" "ec2" {
 
 }
 
-resource "aws_iam_role" "s3readonly" {
+resource "aws_iam_role" "<name>" {
 
 
 }
 #create instance profile to attach iam role to ec2
 resource "aws_iam_instance_profile" "ec2" {
-    name = "s3readec2"
+    name = var.iam_instance_profile_name
     path = "/"
     role = aws_iam_role.s3readonly.name
 
